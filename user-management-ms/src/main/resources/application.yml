@@ -1,0 +1,13 @@
+spring:
+  application:
+  name: user-management-ms
+  datasource:
+    url: jdbc:mysql://localhost:3309/user_system_db
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
