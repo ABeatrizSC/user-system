@@ -1,3 +1,13 @@
 spring:
   application:
   name: notify-ms
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+rabbitmq:
+  queue:
+    user-events:
+      created: notify.user-events.created
+      updated: notify.user-events.updated

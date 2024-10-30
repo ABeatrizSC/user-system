@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  rabbit-container:
+    image: rabbitmq
+    container_name: rabbit-notify
+    ports:
+      - 5672:5672
+      - 15672:15672
