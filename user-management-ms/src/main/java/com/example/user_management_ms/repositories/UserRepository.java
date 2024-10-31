@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findUserByUsername(String username);
+    Optional<User> findUserByUsername(String username);
 
     @Modifying
     @Transactional

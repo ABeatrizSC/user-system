@@ -4,13 +4,10 @@ import com.example.user_management_ms.dto.UserCreateRequestDto;
 import com.example.user_management_ms.dto.UserCreateResponseDto;
 import com.example.user_management_ms.dto.UserUpdatePasswordRequestDto;
 import com.example.user_management_ms.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @AllArgsConstructor
@@ -29,8 +26,8 @@ public class UserController {
     }
 
     @PutMapping("/update-password")
-    public ResponseEntity<Void> updatePassword(@RequestBody UserUpdatePasswordRequestDto passwordRequestDto){
-        userService.updatePassword(passwordRequestDto);
+    public ResponseEntity<Void> updatePassword(@RequestBody UserUpdatePasswordRequestDto passwordRequestDto, HttpServletRequest request){
+        userService.updatePassword(passwordRequestDto, request);
         return ResponseEntity.noContent().build();
     }
 }

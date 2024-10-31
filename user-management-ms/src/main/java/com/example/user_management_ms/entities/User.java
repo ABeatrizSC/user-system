@@ -10,14 +10,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
@@ -28,7 +32,7 @@ public class User implements Serializable {
     @Column(nullable = false, unique = true, length = 100)
     private String username;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false)
     private String password;
 
     @Column(unique = true, length = 50)
