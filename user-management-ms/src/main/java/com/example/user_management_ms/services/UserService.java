@@ -9,6 +9,7 @@ import com.example.user_management_ms.dto.UserUpdatePasswordRequestDto;
 import com.example.user_management_ms.dto.security.AccountCredentialsDto;
 import com.example.user_management_ms.entities.Address;
 import com.example.user_management_ms.entities.User;
+import com.example.user_management_ms.enums.UserOperationsEnum;
 import com.example.user_management_ms.exceptions.InvalidNewPasswordException;
 import com.example.user_management_ms.exceptions.UserNotFoundException;
 import com.example.user_management_ms.feign.AddressFeign;
@@ -84,10 +85,10 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(username));
     }
 
-    public void notify(User user, String exchange, String routingKey){
+    public void notify(User user, String exchange, UserOperationsEnum operation){
         UserMessageDto userMessageDto = UserMapper.INSTANCE.convertEntityToMessageDto(user);
-        userMessageDto.setOperation(routingKey);
-        rabbitTemplate.convertAndSend(exchange, routingKey, userMessageDto);
+        userMessageDto.setOperation(operation);
+        rabbitTemplate.convertAndSend(exchange, String.valueOf(operation), userMessageDto);
     }
 
     public JwtToken authenticateUser(AccountCredentialsDto credentialsDto) {

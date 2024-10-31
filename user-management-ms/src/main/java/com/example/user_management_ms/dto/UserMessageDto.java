@@ -1,5 +1,6 @@
 package com.example.user_management_ms.dto;
 
+import com.example.user_management_ms.enums.UserOperationsEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,5 +12,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserMessageDto {
     private String username;
-    private String operation;
+    private UserOperationsEnum operation;
 }

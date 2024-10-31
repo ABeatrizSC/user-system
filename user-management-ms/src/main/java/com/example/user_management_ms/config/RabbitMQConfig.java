@@ -1,5 +1,6 @@
 package com.example.user_management_ms.config;
 
+import com.example.user_management_ms.enums.UserOperationsEnum;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -23,8 +24,8 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.user.exchange}")
     private String exchange;
 
-    public static final String USER_CREATED_ROUTING_KEY = "CREATE";
-    public static final String USER_UPDATED_ROUTING_KEY = "UPDATE";
+    public static final UserOperationsEnum USER_CREATED_ROUTING_KEY = UserOperationsEnum.CREATE;
+    public static final UserOperationsEnum USER_UPDATED_ROUTING_KEY = UserOperationsEnum.UPDATE;
 
     @Bean
     public Queue createQueueNotifyUserCreated(){
