@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserMessageDto {
+public class UserMessage {
     private String username;
     private UserOperationsEnum operation;
 }
