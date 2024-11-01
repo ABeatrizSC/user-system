@@ -2,15 +2,21 @@ spring:
   application:
   name: user-management-ms
   datasource:
-    url: jdbc:mysql://localhost:3309/user_system_db
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3309/user_system_db?createDatabaseIfNotExist=true&serverTimezone=UTC
     username: root
     password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
+  rabbitmq:
+    host: rabbitmq
   jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
     hibernate:
       ddl-auto: update
-    show-sql: true
 
 rabbitmq:
   user:

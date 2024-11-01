@@ -1,7 +1,7 @@
 spring:
   application:
   name: notify-ms
-  rabbitmq:
+  rabbit-mq:
     host: localhost
     port: 5672
     username: guest
@@ -10,7 +10,7 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: notify-ms-mongo-db
+      database: notify_db
 rabbitmq:
   queue:
     user-events:
