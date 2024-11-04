@@ -38,7 +38,7 @@ public class User implements Serializable {
     @Column(unique = true, length = 50)
     private String email;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 9)
     private String cep;
 
     @OneToOne(cascade = CascadeType.ALL)

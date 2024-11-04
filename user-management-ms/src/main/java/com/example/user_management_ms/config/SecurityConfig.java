@@ -1,6 +1,5 @@
 package com.example.user_management_ms.config;
 
-import com.example.user_management_ms.security.jwt.JwtAuthenticationEntryPoint;
 import com.example.user_management_ms.security.jwt.JwtAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -49,8 +48,6 @@ public class SecurityConfig {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 ).addFilterBefore(
                         jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class
-                ).exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 ).build();
     }
 

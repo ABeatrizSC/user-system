@@ -66,13 +66,13 @@ public class UserService {
     public void updatePassword(UserUpdatePasswordRequestDto passwordRequestDto, HttpServletRequest request){
         String tokenUsername = jwtTokenService.getSubjectFromToken(jwtTokenService.recoveryToken(request));
 
+        User user = findUserByUsername(passwordRequestDto.getUsername());
+
         if (!tokenUsername.equals(passwordRequestDto.getUsername())) {
             throw new SecurityException("Unauthorized action.");
         }
 
-        User user = findUserByUsername(passwordRequestDto.getUsername());
-
-        if (arePasswordsDifferent(passwordRequestDto) && isCurrentPasswordCorrect(passwordRequestDto, user)) {
+        if (arePasswordsDifferent(passwordRequestDto, user) && isCurrentPasswordCorrect(passwordRequestDto, user)) {
             String encryptedNewPassword = encodePassword(passwordRequestDto.getNewPassword());
             userRepository.updatePassword(user.getId(), encryptedNewPassword);
 
@@ -92,6 +92,8 @@ public class UserService {
     }
 
     public JwtToken authenticateUser(AccountCredentialsDto credentialsDto) {
+        findUserByUsername(credentialsDto.getUsername());
+
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(credentialsDto.getUsername(), credentialsDto.getPassword());
 
@@ -106,8 +108,8 @@ public class UserService {
         return securityConfig.passwordEncoder().encode(password);
     }
 
-    public Boolean arePasswordsDifferent(UserUpdatePasswordRequestDto passwordRequestDto){
-        if (!securityConfig.passwordEncoder().matches(passwordRequestDto.getNewPassword(), passwordRequestDto.getNewPassword())){
+    public Boolean arePasswordsDifferent(UserUpdatePasswordRequestDto passwordRequestDto, User user){
+        if (!securityConfig.passwordEncoder().matches(passwordRequestDto.getNewPassword(), user.getPassword())){
             return true;
         } else {
             throw new InvalidNewPasswordException();
