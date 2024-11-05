@@ -1,7 +1,6 @@
 package com.example.user_management_ms.exceptions;
 
 import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -64,16 +63,6 @@ public class ApiExceptionHandler {
         errorBody.put("error", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorBody);
-    }
-
-    @ExceptionHandler(JWTVerificationException.class)
-    public ResponseEntity<Map<String, Object>> handleJWTVerificationException(JWTVerificationException e) {
-        Map<String, Object> errorBody = new HashMap<>();
-        errorBody.put("timestamp", LocalDateTime.now());
-        errorBody.put("status", HttpStatus.UNAUTHORIZED.value());
-        errorBody.put("error", e.getMessage());
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorBody);
     }
 
     @ExceptionHandler(SecurityException.class)

@@ -1,5 +1,6 @@
 package com.example.user_management_ms.config;
 
+import com.example.user_management_ms.security.jwt.JwtAuthenticationEntryPoint;
 import com.example.user_management_ms.security.jwt.JwtAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/api/users/update-password"
@@ -27,11 +29,12 @@ public class SecurityConfig {
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/api/auth",
-            "/api/users/register",
-            "/v3/api-docs/**",
-            "/swagger-ui-custom.html", "/swagger-ui.html", "/swagger-ui/**",
-            "/**.html", "/webjars/**", "/configuration/**", "/swagger-resources/**"
+            "/api/users/register"
     };
+
+    public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -46,6 +49,8 @@ public class SecurityConfig {
                 )
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                ).exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 ).addFilterBefore(
                         jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class
                 ).build();

@@ -3,7 +3,6 @@ package com.example.user_management_ms.security.jwt.services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.user_management_ms.security.jwt.JwtUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
@@ -34,17 +33,12 @@ public class JwtTokenService {
     }
 
     public String getSubjectFromToken(String token) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
-            return JWT.require(algorithm)
-                    .withIssuer(ISSUER)
-                    .build()
-                    .verify(token)
-                    .getSubject();
-        } catch (
-                JWTVerificationException exception){
-            throw new JWTVerificationException("Invalid or expired token.");
-        }
+        Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+        return JWT.require(algorithm)
+                .withIssuer(ISSUER)
+                .build()
+                .verify(token)
+                .getSubject();
     }
 
     public String recoveryToken(HttpServletRequest request) {
