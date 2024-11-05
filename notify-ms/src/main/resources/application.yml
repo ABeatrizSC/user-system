@@ -1,3 +1,18 @@
 spring:
   application:
   name: notify-ms
+  rabbit-mq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: notify_db
+rabbitmq:
+  queue:
+    user-events:
+      created: notify.user-events.created
+      updated: notify.user-events.updated

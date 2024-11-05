@@ -1,0 +1,99 @@
+version: '3.9'
+
+services:
+  user-management-ms:
+    image: user-management-ms
+    build:
+      context: ./user-management-ms
+      dockerfile: Dockerfile
+    container_name: user-management-ms
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: America/Sao_Paulo
+      SPRING.DATASOURCE.URL: jdbc:mysql://mysql-user-db:3306/user_management_db?createDatabaseIfNotExist=true&serverTimezone=UTC&autoReconnect=true
+      SPRING.DATASOURCE.USERNAME: root
+      SPRING.DATASOURCE.PASSWORD: root
+      SPRING.RABBITMQ.HOST: rabbitmq
+      SPRING.RABBITMQ.PORT: 5672
+      SPRING.RABBITMQ.USERNAME: guest
+      SPRING.RABBITMQ.PASSWORD: guest
+    command: mvn spring-boot:run
+    depends_on:
+      mysql-user-db:
+        condition: service_started
+    networks:
+      - user-system-network
+
+  mysql-user-db:
+    image: mysql:8.0.34
+    container_name: mysql-user-db
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - "3309:3309"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=user_management_db
+      - TZ=America/Sao_Paulo
+    expose:
+      - 3309
+    networks:
+      - user-system-network
+
+  notify-ms:
+    image: notify-ms
+    restart: always
+    build:
+      context: ./notify-ms
+      dockerfile: Dockerfile
+    container_name: notify-ms
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING.DATA.MONGODB.URI: mongodb://mongo-notify-db:27017/notify_db
+      SPRING.RABBITMQ.HOST: rabbitmq
+      SPRING.RABBITMQ.PORT: 5672
+      SPRING.RABBITMQ.USERNAME: guest
+      SPRING.RABBITMQ.PASSWORD: guest
+    command: mvn spring-boot:run
+    depends_on:
+      mongo-notify-db:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - user-system-network
+
+  mongo-notify-db:
+    image: mongo
+    container_name: mongo-notify-db
+    environment:
+      MONGO_INITDB_DATABASE: logs
+    ports:
+      - "27017:27017"
+    networks:
+      - user-system-network
+
+  rabbitmq:
+    image: rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      timeout: 100s
+      interval: 100s
+      retries: 3
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASSWORD: "guest"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    networks:
+      - user-system-network
+
+networks:
+  user-system-network:
+    driver: bridge
