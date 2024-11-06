@@ -2,9 +2,10 @@
 ## About
 This repository contains Challenge 3 of the Compass Uol scholarship program SPRINGBOOT_AWS_AGO/24. The project consists of creating an API that allows user registration and password updates using Spring Boot. The API includes security with JWT and a messaging system for communication with another microservice using RabbitMQ. The API utilizes OpenFeign to connect with the ViaCEP API, enabling seamless retrieval of postal code (CEP) information.
 
-## Project sctructure
-- `users-management-ms`: microservice for managing a user's password, such as: creating, authenticating and updating a password (saving in a MySQL database)
-- `notify-ms`: microservice responsible for receiving messages from user-management-ms and saving them in a mongoDB database
+## Project sctructure - Microservices
+- `users-management-ms`: microservice for managing a user's password, such as: creating, authenticating and updating a password (saving in a MySQL database).
+- `notify-ms`: microservice responsible for receiving messages from `user-management-ms` and saving them in a mongoDB database.
+- The communication between microservices is managed by RabbitMQ, which uses two specific queues to route events. When a user creation action is performed, a message is sent to the notify.user-events.created queue. For user update actions, the message is routed to the notify.user-events.updated queue.
 
 ## Features
 - Creation of a user
@@ -78,7 +79,7 @@ mvn clean package -DskipTests
 
 cd .. #Returns to the root folder
 
-cd notifyt-ms
+cd notify-ms
 mvn clean install
 mvn clean package -DskipTests
  ```
@@ -181,7 +182,7 @@ docker-compose up --build
 }
  ```
 
-`401 Unhautorized`: Appears when the password is incorretly
+`401 Unauthorized`: Appears when the password is incorretly.
 
 ### User Password Update
 * Endpoint: /api/users/update-password
